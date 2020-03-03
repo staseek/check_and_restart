@@ -1,0 +1,14 @@
+[Unit]
+Description=Checking vpnclient on raspberry and restart if fails
+After=multi-user.target
+
+[Service]
+Type=idle
+User=root
+ExecStart=/usr/bin/python3 /home/pi/tools/check_and_restart/check_and_restart.py
+Restart=always
+TimeoutStartSec=10
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
