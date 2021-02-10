@@ -22,7 +22,7 @@ def check_my_ip_is(ip=YOUR_IP_HERE):
     """
     try:
         logging.info('starting check')
-        return ip == requests.get('https://api.myip.com').json()['ip']
+        return ip == requests.get('https://api.myip.com', timeout=(5.0, 5.0)).json()['ip']
     except Exception as exc:
         logging.exception(exc)
         return False
@@ -32,12 +32,17 @@ def nothing():
     logging.debug('i\'m doing nothing')
 
 def restart_vpnclient():
-    """ Restarting systemd service vpnclient and restarting pihole containers"""
-    logging.debug('restarting vpnclient')
-    call(["systemctl", "restart", "vpnclient"])
-    time.sleep(3)
-    call(["docker-compose", "-f", "/home/pi/pihole/docker-compose.yml", "restart"])
-    logging.debug('restarted vpnclient')
+    """ Restarting systemd service vpnclient """
+    logging.debug('restarting pihole')
+    #call(["docker-compose", "-f", "/home/pi/pihole/docker-compose.yml", "stop"])
+    #time.sleep(3)
+    #call(["bash -c \"yes | docker system prune \""])
+    #logging.debug('docker stopped and pruned')
+    call(["/usr/bin/systemctl restart vpnclient.service"], shell=True)
+    logging.debug('vpnclient restarted')
+    #time.sleep(30)
+    #call(["docker-compose", "-f", "/home/pi/pihole/docker-compose.yml", "start"])
+    #logging.debug('started pihole back')
 
 def main(check_action=check_my_ip_is, action_on_success=nothing, action_on_failure=restart_vpnclient):
     """
@@ -54,3 +59,4 @@ def main(check_action=check_my_ip_is, action_on_success=nothing, action_on_failu
         
 if __name__ == "__main__":
     main()
+
