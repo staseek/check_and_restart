@@ -1,4 +1,8 @@
 # check_and_restart
-Simple python script to check working vpn and restart it.
+Simple python script to check external ip is ip of vpn server.  
+If exception or external ip is not ip of vpn server - restart client for reconnection.  
+Written for home raspberrypi server.  
 
-Script try to get service to check external ip-address. If exception or ip is not ip of vpn server - restart client for reconnection.
+
+**check_and_restart_vpnclient.service** - systemd-unit for persistance  
+**check_and_restart.py** - configure IP-address for yous sand action for restart. 
